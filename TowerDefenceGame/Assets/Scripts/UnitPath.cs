@@ -196,7 +196,7 @@ public sealed class UnitPath : MonoBehaviour
         }
 
         return transform.TransformPoint(GetVelocity(_controlPoints[i], _controlPoints[i + 1], _controlPoints[i + 2],
-            _controlPoints[i + 3], t));
+            _controlPoints[i + 3], t)) - transform.position;
     }
 
     public Vector3 GetDirection(float t)
