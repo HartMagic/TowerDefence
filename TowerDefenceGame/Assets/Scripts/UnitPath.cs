@@ -28,6 +28,11 @@ public sealed class UnitPath : MonoBehaviour
             }
         }
     }
+    
+    public float Length
+    {
+        get { return _length; }
+    }
 
     public Vector3 this[int index]
     {
@@ -94,6 +99,12 @@ public sealed class UnitPath : MonoBehaviour
 
     [SerializeField]
     private bool _isLoop;
+    
+    private float[] _arcLengths;
+    
+    private float _length;
+
+    private const int _parameterizationPointCount = 100;
 
     public void Reset()
     {
@@ -110,6 +121,14 @@ public sealed class UnitPath : MonoBehaviour
             ControlPointMode.Free,
             ControlPointMode.Free
         };
+
+        CalculateLengths();
+    }
+
+    private void Awake()
+    {
+        if(_arcLengths == null)
+            CalculateLengths();
     }
 
     public void AddSegment()
@@ -136,6 +155,8 @@ public sealed class UnitPath : MonoBehaviour
             
             EnforceMode(0);
         }
+
+        CalculateLengths();
     }
 
     public ControlPointMode GetControlPointMode(int index)
@@ -203,6 +224,28 @@ public sealed class UnitPath : MonoBehaviour
     {
         return GetVelocity(t).normalized;
     }
+    
+    private void CalculateLengths()
+    {
+        _arcLengths = new float[_parameterizationPointCount + 1];
+        _arcLengths[0] = 0;
+
+        var point = GetPoint(0);
+        var length = 0.0f;
+
+        for (var i = 1; i <= _parameterizationPointCount; i++)
+        {
+            var nextPoint = GetPoint(i  * (1.0f / _parameterizationPointCount));
+            var d = Vector3.Distance(point, nextPoint);
+            
+            length += d;
+
+            _arcLengths[i] = length;
+            point = nextPoint;
+        }
+
+        _length = length;
+    }
 
     private void EnforceMode(int index)
     {
@@ -257,11 +300,93 @@ public sealed class UnitPath : MonoBehaviour
                3.0f * oneMinusT * t * t * p2 + t * t * t * p3;
     }
 
+    // derivative function
     private Vector3 GetVelocity(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, float t)
     {
         t = Mathf.Clamp01(t);
 
         var oneMinusT = 1.0f - t;
         return 3.0f * oneMinusT * oneMinusT * (p1 - p0) + 6.0f * oneMinusT * t * (p2 - p1) + 3.0f * t * t * (p3 - p2);
+    }
+    
+    public sealed class UnitPathMapper
+    {
+        private UnitPath _path;
+
+        public UnitPathMapper(UnitPath path)
+        {
+            _path = path;
+        }
+
+        // Arc-length parameterization
+        public Vector3 MapPoint(float t)
+        {
+            var targetLength = t * _path.Length;
+            var low = 0;
+            var high = _parameterizationPointCount;
+            var index = 0;
+
+            while (low < high)
+            {
+                index = low + (((high - low) / 2) | 0);
+                if (_path._arcLengths[index] < targetLength)
+                {
+                    low = index + 1;
+                }
+                else
+                {
+                    high = index;
+                }
+            }
+
+            if (_path._arcLengths[index] > targetLength)
+            {
+                index--;
+            }
+
+            var lengthBefore = _path._arcLengths[index];
+            if (Math.Abs(lengthBefore - targetLength) < float.Epsilon)
+            {
+                return _path.GetPoint((float) index / _parameterizationPointCount);
+            }
+        
+            return _path.GetPoint((index + (targetLength - lengthBefore) / (_path._arcLengths[index + 1] - lengthBefore)) /
+                                  _parameterizationPointCount);
+        }
+
+        public Vector3 MapDirection(float t)
+        {
+            var targetLength = t * _path.Length;
+            var low = 0;
+            var high = _parameterizationPointCount;
+            var index = 0;
+
+            while (low < high)
+            {
+                index = low + (((high - low) / 2) | 0);
+                if (_path._arcLengths[index] < targetLength)
+                {
+                    low = index + 1;
+                }
+                else
+                {
+                    high = index;
+                }
+            }
+
+            if (_path._arcLengths[index] > targetLength)
+            {
+                index--;
+            }
+
+            var lengthBefore = _path._arcLengths[index];
+            if (Math.Abs(lengthBefore - targetLength) < float.Epsilon)
+            {
+                return _path.GetDirection((float) index / _parameterizationPointCount);
+            }
+        
+            return _path.GetDirection((index + (targetLength - lengthBefore) / (_path._arcLengths[index + 1] - lengthBefore)) /
+                                  _parameterizationPointCount);
+        }
     }
 }

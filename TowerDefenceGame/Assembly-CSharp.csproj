@@ -57,8 +57,29 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Base.cs" />
+    <Compile Include="Assets\Scripts\BaseVisual.cs" />
     <Compile Include="Assets\Scripts\ControlPointMode.cs" />
+    <Compile Include="Assets\Scripts\DefaultUnit.cs" />
+    <Compile Include="Assets\Scripts\DefaultUnitSpawner.cs" />
+    <Compile Include="Assets\Scripts\IDestroyed.cs" />
+    <Compile Include="Assets\Scripts\IFactory.cs" />
+    <Compile Include="Assets\Scripts\IMoveable.cs" />
+    <Compile Include="Assets\Scripts\ISpawnUnitWaveBehaviour.cs" />
+    <Compile Include="Assets\Scripts\Settings\EnemyUnitUpgradeSettings.cs" />
+    <Compile Include="Assets\Scripts\Settings\PlayerSettings.cs" />
+    <Compile Include="Assets\Scripts\Settings\TowerSettings.cs" />
+    <Compile Include="Assets\Scripts\Settings\TowerUpgradeSettings.cs" />
+    <Compile Include="Assets\Scripts\Settings\UnitSettings.cs" />
+    <Compile Include="Assets\Scripts\Settings\UnitWaveSettings.cs" />
+    <Compile Include="Assets\Scripts\SpawnUnitWaveBehaviour.cs" />
+    <Compile Include="Assets\Scripts\UnitBase.cs" />
+    <Compile Include="Assets\Scripts\UnitModel.cs" />
     <Compile Include="Assets\Scripts\UnitPath.cs" />
+    <Compile Include="Assets\Scripts\UnitPathMapper.cs" />
+    <Compile Include="Assets\Scripts\UnitsController.cs" />
+    <Compile Include="Assets\Scripts\UnitVisual.cs" />
+    <Compile Include="Assets\Scripts\UnitWavesController.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>D:/Projects/TowerDefence/TowerDefenceGame/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
