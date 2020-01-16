@@ -20,10 +20,10 @@
         get { return _speed; }
     }
     
-    private float _health;
-    private float _damage;
-    private float _gold;
-    private float _speed;
+    private readonly float _health;
+    private readonly float _damage;
+    private readonly float _gold;
+    private readonly float _speed;
 
     public UnitModel(float health, float damage, float gold, float speed)
     {

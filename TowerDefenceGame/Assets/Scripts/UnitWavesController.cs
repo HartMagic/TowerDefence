@@ -2,74 +2,59 @@
 using Settings;
 using UnityEngine;
 
-public sealed class UnitWavesController : MonoBehaviour
+public sealed class UnitWavesController 
 {
-    [SerializeField]
-    private UnitWaveSettings _settings;
-
-    [SerializeField]
-    private UnitVisual _prefab;
-    [SerializeField]
-    private UnitSettings _unitSettings;
-    
-    [SerializeField]
-    private UnitPath[] _unitPaths;
-
     public int CurrentWaveIndex
     {
         get { return _currentWaveIndex; }
     }
 
-    private ISpawnUnitWaveBehaviour _spawnUnitWaveBehaviour;
+    private readonly ISpawnUnitWaveBehaviour _spawnUnitWaveBehaviour;
+    private readonly UnitWaveSettings _settings;
 
     private int _currentWaveIndex = 0;
     
     private Coroutine _spawnCoroutine;
     private Coroutine _spawnWaveCoroutine;
 
-    private void Awake()
+    public UnitWavesController(ISpawnUnitWaveBehaviour behaviour, UnitWaveSettings settings)
     {
-        var defaultUnitVisualFactory = new UnitVisual.Factory(_prefab);
-        var defaultUnitFactory = new DefaultUnit.Factory();
-        var defaultUnitSpawner = new DefaultUnitSpawner(defaultUnitVisualFactory, defaultUnitFactory);
-        
-        _spawnUnitWaveBehaviour = new SpawnUnitWaveBehaviour(defaultUnitSpawner, _unitSettings, _unitPaths, transform);
-        
-        StartSpawn();
+        _spawnUnitWaveBehaviour = behaviour;
+        _settings = settings;
     }
 
     public void StartSpawn()
     {
         StopSpawn();
 
-        _spawnCoroutine = StartCoroutine(SpawnCoroutine(_settings.TimeBetweenWaves));
+        _spawnCoroutine = SceneController.Instance.StartCoroutine(SpawnCoroutine(_settings.TimeBetweenWaves, _settings.UnitCountPerWave));
     }
 
     public void StopSpawn()
     {
         if (_spawnCoroutine != null)
         {
-            StopCoroutine(_spawnCoroutine);
+            SceneController.Instance.StopCoroutine(_spawnCoroutine);
             _spawnCoroutine = null;
         }
         
         if(_spawnWaveCoroutine != null)
         {
-            StopCoroutine(_spawnWaveCoroutine);
+            SceneController.Instance.StopCoroutine(_spawnWaveCoroutine);
             _spawnWaveCoroutine = null;
         }
 
         _currentWaveIndex = 0;
     }
 
-    private IEnumerator SpawnCoroutine(float timeBetweenWaves)
+    private IEnumerator SpawnCoroutine(float timeBetweenWaves, int unitCountPerWave)
     {
         while (true)
         {
             _currentWaveIndex++;
         
-            var unitCount = Random.Range(_currentWaveIndex, _currentWaveIndex + _settings.UnitCountPerWave);
-            _spawnWaveCoroutine = StartCoroutine(_spawnUnitWaveBehaviour.SpawnWave(unitCount, _currentWaveIndex));
+            var unitCount = Random.Range(_currentWaveIndex, _currentWaveIndex + unitCountPerWave);
+            yield return SceneController.Instance.StartCoroutine(_spawnUnitWaveBehaviour.SpawnWave(unitCount, _currentWaveIndex));
         
             yield return new WaitForSeconds(timeBetweenWaves);
         }

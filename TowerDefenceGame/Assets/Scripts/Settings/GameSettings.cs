@@ -3,7 +3,7 @@
 namespace Settings
 {
     [CreateAssetMenu(menuName = "Settings/PlayerStartSettings", fileName = "PlayerStartSettings")]
-    public sealed class PlayerSettings : ScriptableObject
+    public sealed class GameSettings : ScriptableObject
     {
         [SerializeField]
         private int _gold;

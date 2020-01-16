@@ -58,18 +58,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Base.cs" />
+    <Compile Include="Assets\Scripts\BaseModel.cs" />
     <Compile Include="Assets\Scripts\BaseVisual.cs" />
     <Compile Include="Assets\Scripts\ControlPointMode.cs" />
     <Compile Include="Assets\Scripts\DefaultUnit.cs" />
     <Compile Include="Assets\Scripts\DefaultUnitSpawner.cs" />
-    <Compile Include="Assets\Scripts\IDestroyed.cs" />
+    <Compile Include="Assets\Scripts\IDestroyable.cs" />
     <Compile Include="Assets\Scripts\IFactory.cs" />
     <Compile Include="Assets\Scripts\IMoveable.cs" />
     <Compile Include="Assets\Scripts\ISpawnUnitWaveBehaviour.cs" />
-    <Compile Include="Assets\Scripts\Settings\EnemyUnitUpgradeSettings.cs" />
-    <Compile Include="Assets\Scripts\Settings\PlayerSettings.cs" />
+    <Compile Include="Assets\Scripts\SceneController.cs" />
+    <Compile Include="Assets\Scripts\Settings\GameSettings.cs" />
     <Compile Include="Assets\Scripts\Settings\TowerSettings.cs" />
-    <Compile Include="Assets\Scripts\Settings\TowerUpgradeSettings.cs" />
     <Compile Include="Assets\Scripts\Settings\UnitSettings.cs" />
     <Compile Include="Assets\Scripts\Settings\UnitWaveSettings.cs" />
     <Compile Include="Assets\Scripts\SpawnUnitWaveBehaviour.cs" />
@@ -80,6 +80,24 @@
     <Compile Include="Assets\Scripts\UnitsController.cs" />
     <Compile Include="Assets\Scripts\UnitVisual.cs" />
     <Compile Include="Assets\Scripts\UnitWavesController.cs" />
+    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface-Mobile.shader" />
+    <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
+    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_Properties.cginc" />
+    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Bitmap-Custom-Atlas.shader" />
+    <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
+    <None Include="Assets\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />
+    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile Masking.shader" />
+    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Bitmap-Mobile.shader" />
+    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF Overlay.shader" />
+    <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />
+    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_Surface.cginc" />
+    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile Overlay.shader" />
+    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Bitmap.shader" />
+    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro.cginc" />
+    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF.shader" />
+    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile.shader" />
+    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Sprite.shader" />
+    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface.shader" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>D:/Projects/TowerDefence/TowerDefenceGame/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>

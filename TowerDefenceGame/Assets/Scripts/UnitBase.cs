@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public abstract class UnitBase : IMoveable, IDestroyed, IDamageTarget
+public abstract class UnitBase : IMoveable, IDestroyable
 {
     public float Health
     {
@@ -52,9 +52,11 @@ public abstract class UnitBase : IMoveable, IDestroyed, IDamageTarget
     protected Quaternion _currentRotation;
 
     private bool _isDestroyed;
+
+    protected IDestroyable _attackTarget;
    
-    public event Action<IDestroyed, float> Damaged;
-    public event Action<IDestroyed> Destroyed;
+    public event Action<IDestroyable, float> Damaged;
+    public event Action<IDestroyable> Destroyed;
 
     protected UnitBase(UnitVisual visual, UnitModel model)
     {
@@ -80,6 +82,19 @@ public abstract class UnitBase : IMoveable, IDestroyed, IDamageTarget
         }
     }
 
+    public void SetAttackTarget(IDestroyable target)
+    {
+        _attackTarget = target;
+    }
+    
+    public virtual void Attack(IDestroyable target)
+    {
+        if (target != null)
+        {
+            target.ApplyDamage(Damage);
+        }
+    }
+
     public virtual void Destroy()
     {
         IsDestroyed = true;
@@ -101,7 +116,7 @@ public abstract class UnitBase : IMoveable, IDestroyed, IDamageTarget
     }
 
     /// <summary>
-    /// The logic of Unit that perform every frame.
+    /// The logic of Unit that perform every frame when the Unit isn't destroyed.
     /// </summary>
     public virtual void Update()
     {

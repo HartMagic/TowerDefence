@@ -4,16 +4,12 @@ using UnityEngine;
 public class DefaultUnit : UnitBase
 {
     private float _currentProgress;
-    
-    private readonly UnitPath _path;
-    private readonly UnitPath.UnitPathMapper _pathMapper;
 
-    public event Action<float> TargetReached;
+    private readonly UnitPath.UnitPathMapper _pathMapper;
     
     public DefaultUnit(UnitVisual visual, UnitModel model, UnitPath path) : base(visual, model)
     {
-        _path = path;
-        _pathMapper = new UnitPath.UnitPathMapper(_path);
+        _pathMapper = new UnitPath.UnitPathMapper(path);
     }
 
     public override void Move(float speed, float t)
@@ -21,7 +17,7 @@ public class DefaultUnit : UnitBase
         _currentProgress += t * speed;
 
         CheckProgress();
-
+        
         _currentPosition = _pathMapper.MapPoint(_currentProgress);
         _currentRotation = Quaternion.LookRotation(_pathMapper.MapDirection(_currentProgress));
     }
@@ -40,15 +36,25 @@ public class DefaultUnit : UnitBase
 
             IsDestroyed = true;
             
-            TargetReached?.Invoke(_model.Damage);
+            Attack(_attackTarget);
         }
     }
     
     public sealed class Factory : IFactory<UnitBase, UnitVisual, UnitModel, UnitPath>
     {
+        private readonly IDestroyable _target;
+        
+        public Factory(IDestroyable target)
+        {
+            _target = target;
+        }
+        
         public UnitBase Create(UnitVisual visual, UnitModel model, UnitPath path)
         {
-            return new DefaultUnit(visual, model, path);
+            var unit = new DefaultUnit(visual, model, path);
+            unit.SetAttackTarget(_target);
+            
+            return unit;
         }
     }
 }

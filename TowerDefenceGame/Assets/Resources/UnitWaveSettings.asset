@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: UnitWaveSettings
   m_EditorClassIdentifier: 
   _timeBetweenWaves: 5
-  _unitCountPerWave: 10
+  _unitCountPerWave: 5

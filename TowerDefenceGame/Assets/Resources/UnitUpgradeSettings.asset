@@ -9,13 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a50c189c68d82fd45a10ce1966b7d2c1, type: 3}
-  m_Name: TowerUpgradeSettings
+  m_Script: {fileID: 11500000, guid: fae4faa0cf267314c912d77c07ccadad, type: 3}
+  m_Name: UnitUpgradeSettings
   m_EditorClassIdentifier: 
-  _upgratedFields:
-  - _type: 0
-    _value: 10
-  - _type: 1
-    _value: 0
-  - _type: 2
-    _value: 0
+  _health: 10
+  _damage: 10
+  _gold: 100
+  _speed: 0

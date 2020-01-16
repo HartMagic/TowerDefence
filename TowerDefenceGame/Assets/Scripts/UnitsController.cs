@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public sealed class UnitsController : MonoBehaviour
+public sealed class UnitsController
 {
     public List<UnitBase> ActiveUnits
     {
@@ -19,7 +19,7 @@ public sealed class UnitsController : MonoBehaviour
         get
         {
             if (_instance == null)
-                _instance = FindObjectOfType<UnitsController>();
+                _instance = new UnitsController();
 
             return _instance;
         }
@@ -29,23 +29,18 @@ public sealed class UnitsController : MonoBehaviour
 
     private Coroutine _updatingUnitsCoroutine;
 
-    private void Awake()
-    {
-        StartUpdateUnits();
-    }
-
     public void StartUpdateUnits()
     {
         StopUpdateUnits();
 
-        _updatingUnitsCoroutine = StartCoroutine(UpdateUnits());
+        _updatingUnitsCoroutine = SceneController.Instance.StartCoroutine(UpdateUnits());
     }
 
     public void StopUpdateUnits()
     {
         if (_updatingUnitsCoroutine != null)
         {
-            StopCoroutine(_updatingUnitsCoroutine);
+            SceneController.Instance.StopCoroutine(_updatingUnitsCoroutine);
             _updatingUnitsCoroutine = null;
         }
     }
@@ -74,10 +69,11 @@ public sealed class UnitsController : MonoBehaviour
             }
             
             yield return new WaitForEndOfFrame();
+            ClearUnitsForUnregistering();
         }
     }
 
-    private void LateUpdate()
+    private void ClearUnitsForUnregistering()
     {
         foreach (var baseUnit in _unitsForUnregistering)
         {
