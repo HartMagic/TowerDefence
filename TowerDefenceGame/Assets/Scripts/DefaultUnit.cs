@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Core;
 using UnityEngine;
 
 public class DefaultUnit : UnitBase
@@ -7,7 +7,10 @@ public class DefaultUnit : UnitBase
 
     private readonly UnitPath.UnitPathMapper _pathMapper;
     
-    public DefaultUnit(UnitVisual visual, UnitModel model, UnitPath path) : base(visual, model)
+    private Vector3 _currentPosition;
+    private Quaternion _currentRotation;
+    
+    public DefaultUnit(DefaultUnitVisual visual, DefaultUnitModel model, UnitPath path) : base(visual, model)
     {
         _pathMapper = new UnitPath.UnitPathMapper(path);
     }
@@ -25,7 +28,26 @@ public class DefaultUnit : UnitBase
     public override void Reset()
     {
         base.Reset();
+        
         _currentProgress = 0;
+        
+        _currentPosition = Vector3.zero;
+        _currentRotation = Quaternion.identity;
+        
+        if (_visual != null)
+        {
+            _visual.ResetVisual();
+        }
+    }
+
+    public override void Update()
+    {
+        base.Update();
+
+        if (_visual != null)
+        {
+            ((DefaultUnitVisual)_visual).UpdateVisualTransform(_currentPosition, _currentRotation);
+        }
     }
 
     private void CheckProgress()
@@ -40,7 +62,7 @@ public class DefaultUnit : UnitBase
         }
     }
     
-    public sealed class Factory : IFactory<UnitBase, UnitVisual, UnitModel, UnitPath>
+    public sealed class Factory : IFactory<DefaultUnit, DefaultUnitVisual, DefaultUnitModel, UnitPath>
     {
         private readonly IAttackTarget _target;
         
@@ -49,7 +71,7 @@ public class DefaultUnit : UnitBase
             _target = target;
         }
         
-        public UnitBase Create(UnitVisual visual, UnitModel model, UnitPath path)
+        public DefaultUnit Create(DefaultUnitVisual visual, DefaultUnitModel model, UnitPath path)
         {
             var unit = new DefaultUnit(visual, model, path);
             unit.SetAttackTarget(_target);
