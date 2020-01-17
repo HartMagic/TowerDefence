@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class Base : IDestroyable
+public class Base : IAttackTarget
 {
     public float Health
     {
@@ -24,9 +24,14 @@ public class Base : IDestroyable
             }
         }
     }
+
+    public Vector3 WorldPosition
+    {
+        get { return _visual.transform.position; }
+    }
     
-    public event Action<IDestroyable, float> Damaged;
-    public event Action<IDestroyable> Destroyed;
+    public event Action<IAttackTarget, float> Damaged;
+    public event Action<IAttackTarget> Destroyed;
 
     private readonly BaseVisual _visual;
     private readonly BaseModel _model;
@@ -51,7 +56,5 @@ public class Base : IDestroyable
         {
             IsDestroyed = true;
         }
-        
-        Debug.Log(Health);
     }
 }

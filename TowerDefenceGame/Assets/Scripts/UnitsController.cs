@@ -5,14 +5,14 @@ using UnityEngine;
 
 public sealed class UnitsController
 {
-    public List<UnitBase> ActiveUnits
+    public IList<UnitBase> ActiveUnits
     {
         get { return _unitsOnScene.Where(x => !x.IsDestroyed).ToList(); }
     }
     
-    private readonly List<UnitBase> _unitsOnScene = new List<UnitBase>();
+    private readonly IList<UnitBase> _unitsOnScene = new List<UnitBase>();
 
-    private readonly List<UnitBase> _unitsForUnregistering = new List<UnitBase>();
+    private readonly IList<UnitBase> _unitsForUnregistering = new List<UnitBase>();
     
     public static UnitsController Instance
     {

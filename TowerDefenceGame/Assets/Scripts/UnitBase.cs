@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public abstract class UnitBase : IMoveable, IDestroyable
+public abstract class UnitBase : IMoveable, IAttackTarget, IAttackable
 {
     public float Health
     {
@@ -43,6 +43,16 @@ public abstract class UnitBase : IMoveable, IDestroyable
         }
     }
     
+    public IAttackTarget AttackTarget
+    {
+        get { return _attackTarget; }
+    }
+
+    public Vector3 WorldPosition
+    {
+        get { return _visual.transform.position; }
+    }
+    
     protected readonly UnitVisual _visual;
     protected readonly UnitModel _model;
     
@@ -53,10 +63,10 @@ public abstract class UnitBase : IMoveable, IDestroyable
 
     private bool _isDestroyed;
 
-    protected IDestroyable _attackTarget;
+    protected IAttackTarget _attackTarget;
    
-    public event Action<IDestroyable, float> Damaged;
-    public event Action<IDestroyable> Destroyed;
+    public event Action<IAttackTarget, float> Damaged;
+    public event Action<IAttackTarget> Destroyed;
 
     protected UnitBase(UnitVisual visual, UnitModel model)
     {
@@ -82,16 +92,16 @@ public abstract class UnitBase : IMoveable, IDestroyable
         }
     }
 
-    public void SetAttackTarget(IDestroyable target)
+    public void SetAttackTarget(IAttackTarget target)
     {
         _attackTarget = target;
     }
     
-    public virtual void Attack(IDestroyable target)
+    public virtual void Attack()
     {
-        if (target != null)
+        if (_attackTarget != null)
         {
-            target.ApplyDamage(Damage);
+            _attackTarget.ApplyDamage(Damage);
         }
     }
 
@@ -109,8 +119,11 @@ public abstract class UnitBase : IMoveable, IDestroyable
         _currentPosition = Vector3.zero;
         _currentRotation = Quaternion.identity;
 
+        _attackTarget = null;
+
         if (_visual != null)
         {
+            _visual.ResetVisual();
             _visual.UpdateVisualTransform(_currentPosition, _currentRotation);
         }
     }

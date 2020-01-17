@@ -36,15 +36,15 @@ public class DefaultUnit : UnitBase
 
             IsDestroyed = true;
             
-            Attack(_attackTarget);
+            Attack();
         }
     }
     
     public sealed class Factory : IFactory<UnitBase, UnitVisual, UnitModel, UnitPath>
     {
-        private readonly IDestroyable _target;
+        private readonly IAttackTarget _target;
         
-        public Factory(IDestroyable target)
+        public Factory(IAttackTarget target)
         {
             _target = target;
         }

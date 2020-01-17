@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fae4faa0cf267314c912d77c07ccadad, type: 3}
   m_Name: UnitSettings
   m_EditorClassIdentifier: 
-  _health: 100
+  _health: 200
   _damage: 10
-  _gold: 100
+  _gold: 10
   _speed: 0.1

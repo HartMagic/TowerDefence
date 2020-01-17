@@ -18,7 +18,7 @@ public class UnitVisual : MonoBehaviour
     
     public sealed class Factory : IFactory<UnitVisual, UnitVisualFactoryData>
     {
-        private readonly List<UnitVisual> _visualsOnScene = new List<UnitVisual>(); // pool of unit visuals (default)
+        private readonly IList<UnitVisual> _visualsOnScene = new List<UnitVisual>(); // pool of unit visuals (default)
 
         private readonly UnitVisual _prefab;
         
@@ -43,6 +43,9 @@ public class UnitVisual : MonoBehaviour
             else
             {
                 unitVisual = _visualsOnScene.First(x => !x.gameObject.activeSelf);
+                
+                unitVisual.transform.position = data.Position;
+                unitVisual.transform.rotation = data.Rotation;
                 unitVisual.gameObject.SetActive(true);
             }
 

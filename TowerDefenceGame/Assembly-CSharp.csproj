@@ -60,10 +60,12 @@
     <Compile Include="Assets\Scripts\Base.cs" />
     <Compile Include="Assets\Scripts\BaseModel.cs" />
     <Compile Include="Assets\Scripts\BaseVisual.cs" />
+    <Compile Include="Assets\Scripts\BulletVisual.cs" />
     <Compile Include="Assets\Scripts\ControlPointMode.cs" />
     <Compile Include="Assets\Scripts\DefaultUnit.cs" />
     <Compile Include="Assets\Scripts\DefaultUnitSpawner.cs" />
-    <Compile Include="Assets\Scripts\IDestroyable.cs" />
+    <Compile Include="Assets\Scripts\IAttackable.cs" />
+    <Compile Include="Assets\Scripts\IAttackTarget.cs" />
     <Compile Include="Assets\Scripts\IFactory.cs" />
     <Compile Include="Assets\Scripts\IMoveable.cs" />
     <Compile Include="Assets\Scripts\ISpawnUnitWaveBehaviour.cs" />
@@ -73,6 +75,10 @@
     <Compile Include="Assets\Scripts\Settings\UnitSettings.cs" />
     <Compile Include="Assets\Scripts\Settings\UnitWaveSettings.cs" />
     <Compile Include="Assets\Scripts\SpawnUnitWaveBehaviour.cs" />
+    <Compile Include="Assets\Scripts\TowerBase.cs" />
+    <Compile Include="Assets\Scripts\TowerModel.cs" />
+    <Compile Include="Assets\Scripts\TowersController.cs" />
+    <Compile Include="Assets\Scripts\TowerVisual.cs" />
     <Compile Include="Assets\Scripts\UnitBase.cs" />
     <Compile Include="Assets\Scripts\UnitModel.cs" />
     <Compile Include="Assets\Scripts\UnitPath.cs" />

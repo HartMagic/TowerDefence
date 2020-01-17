@@ -7,13 +7,13 @@ namespace Settings
     public class UnitSettings : ScriptableObject
     {
         [SerializeField]
-        protected float _health;
+        private float _health;
         [SerializeField]
-        protected float _damage;
+        private float _damage;
         [SerializeField]
-        protected int _gold;
+        private int _gold;
         [SerializeField]
-        protected float _speed;
+        private float _speed;
 
         public float Health
         {

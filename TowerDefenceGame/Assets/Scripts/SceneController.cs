@@ -1,12 +1,13 @@
 ﻿using Settings;
 using UnityEngine;
 
+[DisallowMultipleComponent]
 public sealed class SceneController : MonoBehaviour
 {
-    [SerializeField]
     private UnitWavesController _unitWavesController;
-    [SerializeField]
-    private UnitsController _unitsController = UnitsController.Instance;
+    
+    private readonly UnitsController _unitsController = UnitsController.Instance;
+    private readonly TowersController _towersController = TowersController.Instance;
     
     [Space]
     [SerializeField]
@@ -28,9 +29,25 @@ public sealed class SceneController : MonoBehaviour
     [SerializeField]
     private GameSettings _gameSettings;
 
+    [Space]
+    [SerializeField]
+    private Transform[] _towersPositions;
+    [SerializeField]
+    private TowerVisual _towerPrefab;
+    [SerializeField]
+    private BulletVisual _bulletPrefab;
+    [SerializeField]
+    private TowerSettings _towerSettings;
+
     public Base Base
     {
-        get { return _base; }
+        get
+        {
+            if(_base == null)
+                _base = new Base(_baseVisual, new BaseModel(_gameSettings.Health));
+            
+            return _base;
+        }
     }
     
     public static SceneController Instance
@@ -51,22 +68,49 @@ public sealed class SceneController : MonoBehaviour
     
     private void Start()
     {
-        _base = new Base(_baseVisual, new BaseModel(_gameSettings.Health));
-        _base.Destroyed += OnBaseDestroyed;
+        InitializeBase();
+        InitializeUnits();
+        InitializeTowers();
         
+        StartGame();
+    }
+
+    // Replace to initializator
+    private void InitializeBase()
+    {
+        Base.Destroyed += OnBaseDestroyed;
+    }
+
+    // Replace to initializator
+    private void InitializeUnits()
+    {
         var defaultUnitVisualFactory = new UnitVisual.Factory(_prefab);
         var defaultUnitFactory = new DefaultUnit.Factory(_base);
         var defaultUnitSpawner = new DefaultUnitSpawner(defaultUnitVisualFactory, defaultUnitFactory);
         
         _spawnUnitWaveBehaviour = new SpawnUnitWaveBehaviour(defaultUnitSpawner, _unitSettings, _unitUpgradeSettings, _unitPaths, transform);
         _unitWavesController = new UnitWavesController(_spawnUnitWaveBehaviour, _waveSettings);
-        
-        StartGame();
     }
 
-    private void OnBaseDestroyed(IDestroyable obj)
+    // Replace to initializator
+    private void InitializeTowers()
     {
-        //EndGame();
+        var defaultTowerVisualFactory = new TowerVisual.Factory(_towerPrefab, _bulletPrefab);
+        var towerFactory = new TowerBase.Factory();
+        var model = new TowerModel(_towerSettings.Damage, _towerSettings.FiringRate, _towerSettings.DetectingDistance, _towerSettings.Cost);
+        
+        for (var i = 0; i < _towersPositions.Length; i++)
+        {
+            var towerVisualData = new TowerVisualFactoryData(_towersPositions[i].position, _towersPositions[i].rotation, transform);
+            var towerVisual = defaultTowerVisualFactory.Create(towerVisualData);
+            var tower = towerFactory.Create(towerVisual, model);
+            tower.Reset();
+        }
+    }
+
+    private void OnBaseDestroyed(IAttackTarget obj)
+    {
+        EndGame();
     }
 
     public void StartGame()
@@ -79,6 +123,11 @@ public sealed class SceneController : MonoBehaviour
         if (_unitsController != null)
         {
             _unitsController.StartUpdateUnits();
+        }
+
+        if (_towersController != null)
+        {
+            _towersController.StartUpdateTowers();
         }
     }
 
@@ -93,18 +142,15 @@ public sealed class SceneController : MonoBehaviour
         {
             _unitsController.StopUpdateUnits();
         }
+        
+        if (_towersController != null)
+        {
+            _towersController.StopUpdateTowers();
+        }
     }
 
     public void EndGame()
     {
-        if (_unitWavesController != null)
-        {
-            _unitWavesController.StopSpawn();
-        }
-        
-        if (_unitsController != null)
-        {
-            _unitsController.StopUpdateUnits();
-        }
+        StopGame();
     }
 }

@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: 10
   _damage: 10
-  _gold: 100
+  _gold: 5
   _speed: 0

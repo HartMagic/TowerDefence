@@ -6,11 +6,13 @@ namespace Settings
     public class TowerSettings : ScriptableObject
     {
         [SerializeField]
-        protected float _damage;
+        private float _damage;
         [SerializeField]
-        protected float _firingRate;
+        private float _firingRate;
         [SerializeField]
-        protected float _detectingDistance;
+        private float _detectingDistance;
+        [SerializeField]
+        private int _cost;
 
         public float Damage
         {
@@ -25,6 +27,11 @@ namespace Settings
         public float DetectingDistance
         {
             get { return _detectingDistance; }
+        }
+
+        public int Cost
+        {
+            get { return _cost; }
         }
     }
 }
