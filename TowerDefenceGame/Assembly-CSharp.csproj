@@ -75,6 +75,7 @@
     <Compile Include="Assets\Scripts\Core\IUpgradeData.cs" />
     <Compile Include="Assets\Scripts\Core\IUpgrader.cs" />
     <Compile Include="Assets\Scripts\Core\LevelController.cs" />
+    <Compile Include="Assets\Scripts\Core\SceneLoader.cs" />
     <Compile Include="Assets\Scripts\Core\TowerBase.cs" />
     <Compile Include="Assets\Scripts\Core\TowerBaseUpgradeData.cs" />
     <Compile Include="Assets\Scripts\Core\TowerModel.cs" />
@@ -101,6 +102,7 @@
     <Compile Include="Assets\Scripts\Settings\UnitSettings.cs" />
     <Compile Include="Assets\Scripts\Settings\UnitWaveSettings.cs" />
     <Compile Include="Assets\Scripts\UI\DefaultUpgradeTowerPanel.cs" />
+    <Compile Include="Assets\Scripts\UI\EndGamePanel.cs" />
     <Compile Include="Assets\Scripts\UI\UIManager.cs" />
     <Compile Include="Assets\Scripts\UI\UpgradeTowerPanel.cs" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface-Mobile.shader" />

@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace UI
 {
+    [DisallowMultipleComponent]
     public class DefaultUpgradeTowerPanel : UpgradeTowerPanel
     {
         [SerializeField]

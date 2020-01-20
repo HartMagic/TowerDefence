@@ -33,8 +33,12 @@ namespace Core
 
         private static LevelController _instance;
 
+        private SceneLoader _sceneLoader;
+
         private void Start()
         {
+            _sceneLoader = new SceneLoader();
+            
             if (_sceneInstaller != null)
                 _sceneInstaller.Install();
 
@@ -59,6 +63,7 @@ namespace Core
                 _uiManager.UpdateGold(_collectedGold);
                 
                 _uiManager.Upgraded += OnUiManagerUpgraded;
+                _uiManager.Restarted += OnUiManagerRestarted;
             }
 
             if (_towersController != null)
@@ -68,6 +73,42 @@ namespace Core
             }
 
             StartGame();
+        }
+
+        private void OnDisable()
+        {
+            if (_sceneInstaller.Base != null)
+            {
+                _sceneInstaller.Base.Damaged -= OnBaseDamaged;
+                _sceneInstaller.Base.Destroyed -= OnBaseDestroyed;
+            }
+
+            if (_unitsController != null)
+            {
+                _unitsController.UnitDestroyed -= OnUnitsControllerUnitDestroyed;
+            }
+            
+            if (_uiManager != null)
+            {
+                _uiManager.Upgraded -= OnUiManagerUpgraded;
+                _uiManager.Restarted -= OnUiManagerRestarted;
+            }
+
+            if (_towersController != null)
+            {
+                _towersController.TowerSelected -= OnTowersControllerTowerSelected;
+                _towersController.TowerUpgraded -= OnTowersControllerTowerUpgraded;
+            }
+
+            StopGame();
+        }
+
+        private void OnUiManagerRestarted()
+        {
+            if (_sceneLoader != null)
+            {
+                _sceneLoader.ReloadCurrentScene();
+            }
         }
 
         private void OnUiManagerUpgraded(ICanUpgrade target, IUpgrader upgrader)
@@ -172,6 +213,11 @@ namespace Core
         public void EndGame()
         {
             StopGame();
+
+            if (_uiManager != null)
+            {
+                _uiManager.ShowEndGamePanel(_destroyedUnits);
+            }
         }
     }
 }

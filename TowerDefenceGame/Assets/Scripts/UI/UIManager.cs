@@ -19,14 +19,22 @@ namespace UI
 
         [SerializeField]
         private UpgradeTowerPanel _defaultUpgradeTowerPanel;
+        [SerializeField]
+        private EndGamePanel _endGamePanel;
 
         public event Action<ICanUpgrade, IUpgrader> Upgraded;
+        public event Action Restarted;
 
         private void OnEnable()
         {
             if (_defaultUpgradeTowerPanel != null)
             {
                 _defaultUpgradeTowerPanel.UpgradeClicked += DefaultUpgradeTowerPanelOnUpgradeClicked;
+            }
+
+            if (_endGamePanel != null)
+            {
+                _endGamePanel.RestartButtonClicked += OnEndGamePanelRestartButtonClicked;
             }
         }
 
@@ -36,11 +44,21 @@ namespace UI
             {
                 _defaultUpgradeTowerPanel.UpgradeClicked -= DefaultUpgradeTowerPanelOnUpgradeClicked;
             }
+            
+            if (_endGamePanel != null)
+            {
+                _endGamePanel.RestartButtonClicked -= OnEndGamePanelRestartButtonClicked;
+            }
         }
 
         private void DefaultUpgradeTowerPanelOnUpgradeClicked(ICanUpgrade upgrade, IUpgrader upgrader)
         {
             Upgraded?.Invoke(upgrade, upgrader);
+        }
+        
+        private void OnEndGamePanelRestartButtonClicked()
+        {
+            Restarted?.Invoke();
         }
 
         public void UpdateHealth(float currentHealth, float maxHealth)
@@ -79,14 +97,21 @@ namespace UI
             }
         }
 
-        public void ShowEndGamePanel()
+        public void ShowEndGamePanel(int unitCount)
         {
-            
+            if (_endGamePanel != null)
+            {
+                _endGamePanel.Initialize(unitCount);
+                _endGamePanel.Show();
+            }
         }
 
         public void HideEndGamePanel()
         {
-            
+            if (_endGamePanel != null)
+            {
+                _endGamePanel.Hide();
+            }
         }
     }
 }

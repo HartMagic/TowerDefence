@@ -63,7 +63,6 @@ namespace UI
             UpgradeClicked?.Invoke(_tower, _upgrader);
             
             UpdateViews();
-            //Hide();
         }
 
         public virtual void Show()
