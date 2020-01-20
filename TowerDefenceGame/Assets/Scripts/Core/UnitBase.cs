@@ -9,13 +9,18 @@ namespace Core
         {
             get { return GetHealth(); }
         }
+        
+        public float MaxHealth
+        {
+            get { return _model.Health; }
+        }
 
         public float Damage
         {
             get { return _model.Damage; }
         }
 
-        public float Gold
+        public int Gold
         {
             get { return _model.Gold; }
         }
@@ -37,7 +42,6 @@ namespace Core
                     if (value)
                     {
                         _visual.gameObject.SetActive(false);
-                        Destroyed?.Invoke(this);
 
                         UnitsController.Instance.UnregisterUnit(this);
                     }
@@ -113,12 +117,14 @@ namespace Core
 
         public virtual void Destroy()
         {
-            IsDestroyed = true;
-
             if (_visual != null)
             {
                 _visual.ApplyDestroyVisual();
             }
+            
+            Destroyed?.Invoke(this);
+            
+            IsDestroyed = true;
         }
 
         public virtual void Reset()

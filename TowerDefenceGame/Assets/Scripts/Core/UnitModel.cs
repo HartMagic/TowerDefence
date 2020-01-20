@@ -12,7 +12,7 @@
             get { return _damage; }
         }
 
-        public float Gold
+        public int Gold
         {
             get { return _gold; }
         }
@@ -24,10 +24,10 @@
     
         private readonly float _health;
         private readonly float _damage;
-        private readonly float _gold;
+        private readonly int _gold;
         private readonly float _speed;
 
-        protected UnitModel(float health, float damage, float gold, float speed)
+        protected UnitModel(float health, float damage, int gold, float speed)
         {
             _health = health;
             _damage = damage;

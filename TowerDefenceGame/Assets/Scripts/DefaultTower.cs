@@ -8,17 +8,12 @@ public class DefaultTower : TowerBase
         get { return Model.FiringRate; }
     }
     
-    public int Cost
-    {
-        get { return Model.Cost; }
-    }
-
-    private DefaultTowerVisual Visual
+    private new DefaultTowerVisual Visual
     {
         get { return (DefaultTowerVisual) _visual; }
     }
 
-    private DefaultTowerModel Model
+    private new DefaultTowerModel Model
     {
         get { return (DefaultTowerModel) _model; }
     }
@@ -32,13 +27,24 @@ public class DefaultTower : TowerBase
 
     public override void Attack()
     {
-        if (_attackTarget != null && (Time.time - _previousTime) >= FiringRate &&
+        if (_attackTarget != null && (Time.time - _previousTime) >= (1.0f/FiringRate) &&
             Vector3.Angle(_attackTarget.WorldPosition - _visual.transform.position, Visual.Forward) <= 10.0f)
         {
             _previousTime = Time.time;
             
             _visual.ApplyAttackVisual();
             _attackTarget.ApplyDamage(Damage);
+        }
+    }
+
+    public override void Upgrade(IUpgradeData data)
+    {
+        var towerData = data as DefaultTowerUpgradeData;
+        if (towerData != null)
+        {
+            _model = new DefaultTowerModel(towerData.Damage, towerData.FiringRate, towerData.DetectingDistance, towerData.Cost);
+            
+            base.Upgrade(data);
         }
     }
 

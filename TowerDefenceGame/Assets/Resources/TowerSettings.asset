@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: TowerSettings
   m_EditorClassIdentifier: 
   _damage: 100
-  _firingRate: 0.5
+  _firingRate: 2
   _detectingDistance: 4
   _cost: 100

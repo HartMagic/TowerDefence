@@ -1,18 +1,19 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 namespace Core
 {
-    public sealed class TowersController
+    public sealed class TowersController : MonoBehaviour
     {
         public static TowersController Instance
         {
             get
             {
                 if (_instance == null)
-                    _instance = new TowersController();
+                    _instance = FindObjectOfType<TowersController>();
 
                 return _instance;
             }
@@ -30,34 +31,55 @@ namespace Core
 
         private Coroutine _updatingTowersCoroutine;
 
+        public event Action<TowerBase> TowerSelected;
+        public event Action<int> TowerUpgraded; 
+
         public void StartUpdateTowers()
         {
             StopUpdateTowers();
 
-            _updatingTowersCoroutine = SceneController.Instance.StartCoroutine(UpdateTowers());
+            _updatingTowersCoroutine = StartCoroutine(UpdateTowers());
         }
 
         public void StopUpdateTowers()
         {
             if (_updatingTowersCoroutine != null)
             {
-                SceneController.Instance.StopCoroutine(_updatingTowersCoroutine);
+                StopCoroutine(_updatingTowersCoroutine);
                 _updatingTowersCoroutine = null;
             }
         }
 
-        public void RegisterTower(TowerBase unit)
+        public void RegisterTower(TowerBase tower)
         {
-            if (!_towersOnScene.Contains(unit))
-                _towersOnScene.Add(unit);
+            if (!_towersOnScene.Contains(tower))
+            {
+                _towersOnScene.Add(tower);
+                
+                tower.Selected += OnTowerSelected;
+                tower.Upgraded += OnTowerUpgraded;
+            }
         }
 
-        public void UnregisterTower(TowerBase unit)
+        private void OnTowerUpgraded(int previewValue)
         {
-            if (_towersOnScene.Contains(unit))
+            if (TowerUpgraded != null)
             {
-                _towersForUnregistering.Add(unit);
+                TowerUpgraded?.Invoke(previewValue);
             }
+        }
+
+        public void UnregisterTower(TowerBase tower)
+        {
+            if (_towersOnScene.Contains(tower))
+            {
+                _towersForUnregistering.Add(tower);
+            }
+        }
+        
+        private void OnTowerSelected(ICanSelect tower)
+        {
+            TowerSelected?.Invoke(tower as TowerBase);
         }
 
         private IEnumerator UpdateTowers()

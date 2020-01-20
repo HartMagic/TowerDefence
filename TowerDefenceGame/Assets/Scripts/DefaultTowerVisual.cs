@@ -10,6 +10,9 @@ public class DefaultTowerVisual : TowerVisual
     [SerializeField]
     private Transform _barrelPivot;
 
+    [SerializeField]
+    private GameObject _selectedCircle;
+
     public Vector3 Forward
     {
         get { return _gun.forward; }
@@ -17,12 +20,12 @@ public class DefaultTowerVisual : TowerVisual
 
     private Vector3 _targetPosition;
     
-    private IFactory<BulletVisual, BulletVisual.BarrelVisualFactoryData> _barrelFactory;
+    private IFactory<BulletVisual, BulletVisual.BarrelVisualFactoryData> _bulletFactory;
     private BulletVisual _bulletPrefab;
 
     public override void InitializeVisual()
     {
-        _barrelFactory = new BulletVisual.Factory(_bulletPrefab); // For ZInject use Bindings and Constructor
+        _bulletFactory = new BulletVisual.Factory(_bulletPrefab); // For ZInject use Bindings and Constructor
     }
 
     public override void UpdateVisualTarget(Vector3 position)
@@ -48,10 +51,18 @@ public class DefaultTowerVisual : TowerVisual
         }
     }
 
+    public override void UpdateSelectedVisual(bool value)
+    {
+        if (_selectedCircle != null)
+        {
+            _selectedCircle.SetActive(value);
+        }
+    }
+
     public override void ApplyAttackVisual()
     {
-        var data = new BulletVisual.BarrelVisualFactoryData(_barrelPivot.position, _barrelPivot.rotation, transform, _targetPosition);
-        var bullet = _barrelFactory.Create(data);
+        var data = new BulletVisual.BarrelVisualFactoryData(_barrelPivot.position, _barrelPivot.rotation, null, _targetPosition);
+        var bullet = _bulletFactory.Create(data);
     }
 
     public override void ResetVisual()
@@ -59,11 +70,19 @@ public class DefaultTowerVisual : TowerVisual
         _head.transform.rotation = Quaternion.identity;
         _gun.transform.rotation = Quaternion.identity;
     }
-    
+
+    protected override void OnDrawGizmos()
+    {
+        base.OnDrawGizmos();
+        
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(_barrelPivot.position, _barrelPivot.position + Forward * 2);
+    }
+
     public sealed class Factory : IFactory<DefaultTowerVisual, DefaultTowerVisualFactoryData>
     {
-        private DefaultTowerVisual _prefab;
-        private BulletVisual _bulletPrefab;
+        private readonly DefaultTowerVisual _prefab;
+        private readonly BulletVisual _bulletPrefab;
         
         public Factory(DefaultTowerVisual prefab, BulletVisual bulletPrefab)
         {

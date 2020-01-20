@@ -1,6 +1,7 @@
 ﻿using Core;
 using Settings;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Installers
 {
@@ -39,6 +40,12 @@ namespace Installers
         [SerializeField]
         private TowerSettings _towerUpgradeSettings;
 
+        [Header("Common")]
+        [SerializeField]
+        private Camera _mainCamera;
+        [SerializeField]
+        private GraphicRaycaster _graphicRaycaster;
+
         public Base Base
         {
             get { return _base; }
@@ -48,23 +55,40 @@ namespace Installers
         {
             get { return _unitWavesController; }
         }
+
+        public ISelector TowerSelector
+        {
+            get { return _towerSelector; }
+        }
+
+        public IUpgrader DefaultUnitUpgrader
+        {
+            get { return _defaultUnitUpgrader; }
+        }
         
-        private Base _base;
+        protected Base _base;
         private UnitWavesController _unitWavesController;
 
-        public void Install()
+        protected IUpgrader _defaultUnitUpgrader;
+        
+        private ISelector _towerSelector;
+
+        public virtual void Install()
         {
+            _towerSelector = new TowerSelector(_mainCamera, _graphicRaycaster);
+            _defaultUnitUpgrader = new DefaultTowerUpgrader(_towerUpgradeSettings);
+            
             InitializeBase();
             InitializeUnits();
             InitializeTowers();
         }
 
-        private void InitializeBase()
+        protected virtual void InitializeBase()
         {
             _base = new Base(_baseVisual, new BaseModel(_baseSettings.Health));
         }
 
-        private void InitializeUnits()
+        protected virtual void InitializeUnits()
         {
             var defaultUnitVisualFactory = new DefaultUnitVisual.Factory(_prefab);
             var defaultUnitFactory = new DefaultUnit.Factory(_base);
@@ -74,7 +98,7 @@ namespace Installers
             _unitWavesController = new UnitWavesController(spawnUnitWaveBehaviour, _waveSettings);
         }
         
-        private void InitializeTowers()
+        protected virtual void InitializeTowers()
         {
             var defaultTowerVisualFactory = new DefaultTowerVisual.Factory(_towerPrefab, _bulletPrefab);
             var towerFactory = new DefaultTower.Factory();

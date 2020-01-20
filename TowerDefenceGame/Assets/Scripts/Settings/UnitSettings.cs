@@ -25,7 +25,7 @@ namespace Settings
             get { return _damage; }
         }
 
-        public float Gold
+        public int Gold
         {
             get { return _gold; }
         }

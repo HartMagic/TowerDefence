@@ -6,6 +6,8 @@ namespace Core
     public interface IAttackTarget
     {
         float Health { get; }
+        float MaxHealth { get; }
+        
         bool IsDestroyed { get; }
     
         Vector3 WorldPosition { get; }

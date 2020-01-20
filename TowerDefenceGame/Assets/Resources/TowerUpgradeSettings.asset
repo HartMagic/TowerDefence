@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: TowerUpgradeSettings
   m_EditorClassIdentifier: 
   _damage: 10
-  _firingRate: -0.01
+  _firingRate: 0.1
   _detectingDistance: 0
   _cost: 100

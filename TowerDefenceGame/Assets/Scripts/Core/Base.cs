@@ -10,6 +10,11 @@ namespace Core
             get { return _model.Health - _inflictedDamage; }
         }
 
+        public float MaxHealth
+        {
+            get { return _model.Health; }
+        }
+
         public bool IsDestroyed
         {
             get { return _isDestroyed; }

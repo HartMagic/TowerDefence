@@ -30,7 +30,7 @@ namespace Core
             StopSpawn();
 
             _spawnCoroutine =
-                SceneController.Instance.StartCoroutine(SpawnCoroutine(_settings.TimeBetweenWaves,
+                LevelController.Instance.StartCoroutine(SpawnCoroutine(_settings.TimeBetweenWaves,
                     _settings.UnitCountPerWave));
         }
 
@@ -38,13 +38,13 @@ namespace Core
         {
             if (_spawnCoroutine != null)
             {
-                SceneController.Instance.StopCoroutine(_spawnCoroutine);
+                LevelController.Instance.StopCoroutine(_spawnCoroutine);
                 _spawnCoroutine = null;
             }
 
             if (_spawnWaveCoroutine != null)
             {
-                SceneController.Instance.StopCoroutine(_spawnWaveCoroutine);
+                LevelController.Instance.StopCoroutine(_spawnWaveCoroutine);
                 _spawnWaveCoroutine = null;
             }
 
@@ -58,8 +58,11 @@ namespace Core
                 _currentWaveIndex++;
 
                 var unitCount = Random.Range(_currentWaveIndex, _currentWaveIndex + unitCountPerWave);
-                yield return SceneController.Instance.StartCoroutine(
+                
+                _spawnWaveCoroutine = LevelController.Instance.StartCoroutine(
                     _spawnUnitWaveBehaviour.SpawnWave(unitCount, _currentWaveIndex));
+
+                yield return _spawnWaveCoroutine;
 
                 yield return new WaitForSeconds(timeBetweenWaves);
             }

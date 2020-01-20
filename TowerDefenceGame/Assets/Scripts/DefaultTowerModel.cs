@@ -7,17 +7,10 @@ public class DefaultTowerModel : TowerModel
         get { return _firingRate; }
     }
     
-    public int Cost
-    {
-        get { return _cost; }
-    }
-    
     private readonly float _firingRate;
-    private readonly int _cost;
     
-    public DefaultTowerModel(float damage, float firingRate, float detectingDistance, int cost) : base(damage, detectingDistance)
+    public DefaultTowerModel(float damage, float firingRate, float detectingDistance, int cost) : base(damage, detectingDistance, cost)
     {
         _firingRate = firingRate;
-        _cost = cost;
     }
 }

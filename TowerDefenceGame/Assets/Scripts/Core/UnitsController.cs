@@ -1,11 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 namespace Core
 {
-    public sealed class UnitsController
+    public sealed class UnitsController : MonoBehaviour
     {
         public IList<UnitBase> ActiveUnits
         {
@@ -21,7 +22,7 @@ namespace Core
             get
             {
                 if (_instance == null)
-                    _instance = new UnitsController();
+                    _instance = FindObjectOfType<UnitsController>();
 
                 return _instance;
             }
@@ -31,18 +32,20 @@ namespace Core
 
         private Coroutine _updatingUnitsCoroutine;
 
+        public event Action<UnitBase> UnitDestroyed; 
+
         public void StartUpdateUnits()
         {
             StopUpdateUnits();
 
-            _updatingUnitsCoroutine = SceneController.Instance.StartCoroutine(UpdateUnits());
+            _updatingUnitsCoroutine = StartCoroutine(UpdateUnits());
         }
 
         public void StopUpdateUnits()
         {
             if (_updatingUnitsCoroutine != null)
             {
-                SceneController.Instance.StopCoroutine(_updatingUnitsCoroutine);
+                StopCoroutine(_updatingUnitsCoroutine);
                 _updatingUnitsCoroutine = null;
             }
         }
@@ -50,7 +53,10 @@ namespace Core
         public void RegisterUnit(UnitBase unit)
         {
             if (!_unitsOnScene.Contains(unit))
+            {
                 _unitsOnScene.Add(unit);
+                unit.Destroyed += OnUnitDestroyed;
+            }
         }
 
         public void UnregisterUnit(UnitBase unit)
@@ -58,6 +64,16 @@ namespace Core
             if (_unitsOnScene.Contains(unit))
             {
                 _unitsForUnregistering.Add(unit);
+                unit.Destroyed -= OnUnitDestroyed;
+            }
+        }
+        
+        private void OnUnitDestroyed(IAttackTarget obj)
+        {
+            var unit = obj as UnitBase;
+            if (unit != null)
+            {
+                UnitDestroyed?.Invoke(unit);
             }
         }
 
