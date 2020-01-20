@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: UnitUpgradeSettings
   m_EditorClassIdentifier: 
   _health: 10
-  _damage: 10
+  _damage: 1
   _gold: 5
   _speed: 0

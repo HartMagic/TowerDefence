@@ -12,7 +12,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <ProjectGuid>{42FCA8CD-5562-FA76-04F9-896EA5873D85}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -75,7 +76,6 @@
     <Compile Include="Assets\Scripts\Core\IUpgradeData.cs" />
     <Compile Include="Assets\Scripts\Core\IUpgrader.cs" />
     <Compile Include="Assets\Scripts\Core\LevelController.cs" />
-    <Compile Include="Assets\Scripts\Core\SceneLoader.cs" />
     <Compile Include="Assets\Scripts\Core\TowerBase.cs" />
     <Compile Include="Assets\Scripts\Core\TowerBaseUpgradeData.cs" />
     <Compile Include="Assets\Scripts\Core\TowerModel.cs" />

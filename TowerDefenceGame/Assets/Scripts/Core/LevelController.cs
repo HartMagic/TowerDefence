@@ -1,6 +1,7 @@
 ﻿using Installers;
 using UI;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Core
 {
@@ -33,12 +34,8 @@ namespace Core
 
         private static LevelController _instance;
 
-        private SceneLoader _sceneLoader;
-
         private void Start()
         {
-            _sceneLoader = new SceneLoader();
-            
             if (_sceneInstaller != null)
                 _sceneInstaller.Install();
 
@@ -105,10 +102,7 @@ namespace Core
 
         private void OnUiManagerRestarted()
         {
-            if (_sceneLoader != null)
-            {
-                _sceneLoader.ReloadCurrentScene();
-            }
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
         private void OnUiManagerUpgraded(ICanUpgrade target, IUpgrader upgrader)
